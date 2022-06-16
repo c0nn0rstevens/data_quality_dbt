@@ -1,2 +1,2 @@
-# dbt_data_quality_testing
+# data_quality_dbt
 Repository for testing the data quality functionality of dbt.
