@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: canada_locker_events
+    description: 'Locker events for Canada only.'
+    docs:
+      show: true
+    tests:
+    - dbt_expectations.expect_table_column_count_to_equal:
+        value: 23
+    columns:
+      - name: wo_no
+        tests:
+          - relationships:
+              to: ref('stg_locker_events')
+              field: wo_no

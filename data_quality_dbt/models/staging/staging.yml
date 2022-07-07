@@ -1,0 +1,81 @@
+version: 2
+
+sources:
+  - name: raw_solace_events
+    database: ingka-dsm-dataplatform-dev
+    schema: data_quality_poc
+    tables:
+      - name: raw_solace__pupm_events
+        loaded_at_field: event_ts
+        freshness:
+          warn_after: 
+            count: 1
+            period: day
+          error_after:
+            count: 365
+            period: day
+
+  - name: raw_som_transactions
+    database: ingka-dsm-dataplatform-dev
+    schema: data_quality_poc
+    tables:
+      - name: raw_som__so_transactions
+
+models:
+  - name: stg_locker_events
+    description: '{{ doc("locker_events") }}'
+    columns:
+      - name: source
+      - name: wo_no
+        tests:
+        # dbt_expectations tests can vary in their scope. This test only works with columns.
+          - dbt_expectations.expect_column_to_exist
+      - name: event_ts
+      - name: event_code
+      - name: slot_id
+      - name: locker_count
+      - name: slot_size
+        tests:
+        - accepted_values:
+            name: accepted_values_slot_size
+            values: ['M','L+', '3XL', 'XL+', 'XXL', 'L-FD', 'L-MD', 'L-SD', 'L-XD', 'M-FD', 'M-MD', 'M-SD', 'M-XD', 'S-FD', 'S-MD', 'S-XD', 'XL-D', 'XL-FD', 'XL-MD', 'XL-SD', 'XL-XD', 'XXL-FD', 'XXXL-FD', 'MXXL-DFD', 'MXXL-SFD']
+      - name: courier_id
+      - name: courier_company_id
+      - name: drop_off_code
+      - name: pup_address
+      - name: pup_city
+      - name: pup_country
+      - name: pup_country_code
+      - name: pup_postcode
+      - name: pup_display_name
+      - name: pup_name
+      - name: pup_type
+        tests:
+        - accepted_values:
+            values: ['LOCKER']
+
+  - name: stg_som_so_transactions
+    description: Sales order management table. This shows the standard descriptions in yaml format.
+    columns:
+        - name: so_no
+          description: Sales order number.
+          tests:
+            - not_null
+        - name: wo_no
+          description: Work order number.
+          tests:
+            - not_null
+        - name: time_window_from_ts
+        - name: time_window_to_ts
+        - name: carrier_id
+          description: Unique carrier id.
+        - name: delivery_method
+          description: '{{ doc("delivery_methods") }}'
+          tests: 
+            - accepted_values:
+                name: accepted_values_delivery_method
+                values: ['Pick up external pick up parcel', 'Pick up at store', 'Pick up external pick up truck', 'Pickup locker iKEA', 'null']
+        - name: status
+          description: Status of order.
+        - name: store
+        - name: shipping_bu
