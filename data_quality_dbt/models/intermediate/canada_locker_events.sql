@@ -1,10 +1,3 @@
-{{
-    config(
-      re_data_monitored=true,
-      re_data_time_filter='event_ts',
-    )
-}}
-
 WITH canada AS (
 
     SELECT 

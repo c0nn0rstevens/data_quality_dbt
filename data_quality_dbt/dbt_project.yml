@@ -3,7 +3,7 @@
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
 name: 'data_quality_dbt'
-version: '1.0.0'
+version: '1.1.1'
 config-version: 2
 
 # This setting configures which "profile" dbt uses for this project.
@@ -37,3 +37,6 @@ models:
       +materialized: table
     intermediate:
       +materialized: view
+
+vars:
+  'dbt_date:time_zone': 'Europe/Amsterdam'

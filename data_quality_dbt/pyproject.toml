@@ -2,11 +2,12 @@
 name = "data_quality_dbt"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Connor Stevens <connor.stevens@ingka.ikea.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 dbt-bigquery = "^1.1.1"
+re-data = "^0.9.2"
 
 [tool.poetry.dev-dependencies]
 
